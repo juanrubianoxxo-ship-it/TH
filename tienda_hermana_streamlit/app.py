@@ -604,7 +604,7 @@ if analysis:
             st.markdown('<span class="step-chip">PASO 3</span>', unsafe_allow_html=True)
             st.header("Estimación de venta y resumen")
             st.markdown('<div class="big-sale-label">VENTA ESTIMADA MENSUAL</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="big-sale-value">{display_number(statistical_forecast["estimacion_mensual"], 2)} <span style="font-size:1.15rem;font-weight:650">pesos</span></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="big-sale-value">{display_number(statistical_forecast["estimacion_mensual"], 2)} <span style="font-size:1.15rem;font-weight:650">millones</span></div>', unsafe_allow_html=True)
         else:
             st.info("Esta sesión conserva un resultado de una versión anterior. Completa las dos fichas y pulsa **Estimar venta** para calcular con el modelo estadístico.")
     elif result and result.get("analysis_id") == analysis_id:
