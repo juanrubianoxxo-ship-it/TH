@@ -363,6 +363,8 @@ st.markdown('<span class="step-chip">PASO 1</span>', unsafe_allow_html=True)
 st.header("Ficha del punto nuevo")
 st.caption("Llena los datos que tienes del punto. Los desplegables se alimentan de los valores que aparecen en las tiendas abiertas de Book.")
 
+project_name = st.text_input("Nombre del punto nuevo", key="project_name_input", placeholder="Ej.: Nuevo punto Centro")
+
 with st.container(border=True):
     st.markdown('<div class="location-title">Ubicación del punto</div>', unsafe_allow_html=True)
     st.markdown('<div class="location-caption">Selecciona en cascada: cada nivel muestra únicamente las opciones válidas del nivel anterior.</div>', unsafe_allow_html=True)
@@ -386,8 +388,6 @@ with st.container(border=True):
         )
 
 with st.form("new_point_form", clear_on_submit=False):
-    project_name = st.text_input("Nombre del punto nuevo", key="project_name_input", placeholder="Ej.: Nuevo punto Centro")
-
     st.markdown('<div class="section-ribbon"><b>Perfil del entorno</b></div>', unsafe_allow_html=True)
     c1, c2, c3, c4 = st.columns(4)
     with c1:
