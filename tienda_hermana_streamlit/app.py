@@ -172,7 +172,7 @@ def candidate_label(cr: str, ranking: pd.DataFrame) -> str:
         return str(cr)
     row = match.iloc[0]
     avg_3m = row.get("VENTA PROMEDIO 3M")
-    avg_label = f"${display_number(float(avg_3m) / 1_000_000, 2)} M" if pd.notna(avg_3m) else "sin venta 3M"
+    avg_label = f"{display_number(avg_3m, 2)} millones de pesos" if pd.notna(avg_3m) else "sin venta 3M"
     return f"{row['NAME']} · CR {row['CR']} · {row.get('MUN', '')} · {row['SIMILITUD']:.1f}% · {avg_label}"
 
 
@@ -527,17 +527,17 @@ if analysis:
     if "Similitud %" in ranking_view:
         ranking_view["Similitud %"] = ranking_view["Similitud %"].round(1)
     if "Venta promedio últimos 3 meses (millones)" in ranking_view:
-        ranking_view["Venta promedio últimos 3 meses (millones)"] = ranking_view["Venta promedio últimos 3 meses (millones)"].div(1_000_000).round(2)
+        ranking_view["Venta promedio últimos 3 meses (millones)"] = ranking_view["Venta promedio últimos 3 meses (millones)"].round(2)
     st.dataframe(ranking_view, width="stretch", hide_index=True, column_config={
         "Similitud %": st.column_config.ProgressColumn("Similitud %", min_value=0, max_value=100, format="%.1f%%"),
-        "Venta promedio últimos 3 meses (millones)": st.column_config.NumberColumn("Venta promedio últimos 3 meses (millones)", format="$ %.2f M"),
+        "Venta promedio últimos 3 meses (millones)": st.column_config.NumberColumn("Venta promedio últimos 3 meses (millones)", format="%.2f millones de pesos"),
     })
     highlight = st.columns(3)
     for index, col in enumerate(highlight):
         if index >= len(top_rows):
             break
         row = top_rows.iloc[index]
-        col.metric(f"#{index + 1} · {row['CR']}", f"${display_number(float(row.get('VENTA PROMEDIO 3M')) / 1_000_000, 2)} M", f"{row['SIMILITUD']:.1f}% similitud")
+        col.metric(f"#{index + 1} · {row['CR']}", f"{display_number(row.get('VENTA PROMEDIO 3M'), 2)} millones de pesos", f"{row['SIMILITUD']:.1f}% similitud")
     selected_cr = st.selectbox(
         "Tienda hermana para completar la ficha",
         candidate_crs,
@@ -588,7 +588,7 @@ if analysis:
                 st.markdown('<span class="step-chip">TIENDA HERMANA</span>', unsafe_allow_html=True)
                 st.subheader(str(mirror["NAME"]))
                 st.caption(f"CR / ID: {mirror['CR']} · {mirror.get('MUN', '')}")
-                st.markdown(f'<span class="match-score">Similitud {selected_rank["SIMILITUD"]:.1f}% · Venta promedio 3M ${display_number(float(selected_rank.get("VENTA PROMEDIO 3M")) / 1_000_000, 2)} M</span>', unsafe_allow_html=True)
+                st.markdown(f'<span class="match-score">Similitud {selected_rank["SIMILITUD"]:.1f}% · Venta promedio 3M {display_number(selected_rank.get("VENTA PROMEDIO 3M"), 2)} millones de pesos</span>', unsafe_allow_html=True)
                 mirror_type = st.selectbox("Tipo", [NO_SELECTION] + TYPE_OPTIONS, key=f"mirror_type_{analysis_id}_{selected_cr}")
                 mirror_transparency = st.selectbox(
                     "Transparencia",
@@ -690,7 +690,7 @@ if analysis:
             st.markdown('<span class="step-chip">PASO 3</span>', unsafe_allow_html=True)
             st.header("Estimación de venta y resumen")
             st.markdown('<div class="big-sale-label">VENTA ESTIMADA MENSUAL</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="big-sale-value">${display_number(statistical_forecast["estimacion_mensual"] / 1_000_000, 2)} <span style="font-size:1.15rem;font-weight:650">millones de pesos</span></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="big-sale-value">{display_number(statistical_forecast["estimacion_mensual"], 2)} <span style="font-size:1.15rem;font-weight:650">millones de pesos</span></div>', unsafe_allow_html=True)
         else:
             st.info("Esta sesión conserva un resultado de una versión anterior. Completa las dos fichas y pulsa **Estimar venta** para calcular con el modelo estadístico.")
     elif result and result.get("analysis_id") == analysis_id:
