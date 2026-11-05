@@ -172,7 +172,7 @@ def candidate_label(cr: str, ranking: pd.DataFrame) -> str:
         return str(cr)
     row = match.iloc[0]
     avg_3m = row.get("VENTA PROMEDIO 3M")
-    avg_label = f"{display_number(avg_3m, 2)} millones de pesos" if pd.notna(avg_3m) else "sin venta 3M"
+    avg_label = f"{display_number(avg_3m, 2)} millones " if pd.notna(avg_3m) else "sin venta 3M"
     return f"{row['NAME']} · CR {row['CR']} · {row.get('MUN', '')} · {row['SIMILITUD']:.1f}% · {avg_label}"
 
 
@@ -537,7 +537,7 @@ if analysis:
         if index >= len(top_rows):
             break
         row = top_rows.iloc[index]
-        col.metric(f"#{index + 1} · {row['CR']}", f"{display_number(row.get('VENTA PROMEDIO 3M'), 2)} millones de pesos", f"{row['SIMILITUD']:.1f}% similitud")
+        col.metric(f"#{index + 1} · {row['CR']}", f"{display_number(row.get('VENTA PROMEDIO 3M'), 2)} millones", f"{row['SIMILITUD']:.1f}% similitud")
     selected_cr = st.selectbox(
         "Tienda hermana para completar la ficha",
         candidate_crs,
@@ -588,7 +588,7 @@ if analysis:
                 st.markdown('<span class="step-chip">TIENDA HERMANA</span>', unsafe_allow_html=True)
                 st.subheader(str(mirror["NAME"]))
                 st.caption(f"CR / ID: {mirror['CR']} · {mirror.get('MUN', '')}")
-                st.markdown(f'<span class="match-score">Similitud {selected_rank["SIMILITUD"]:.1f}% · Venta promedio 3M {display_number(selected_rank.get("VENTA PROMEDIO 3M"), 2)} millones de pesos</span>', unsafe_allow_html=True)
+                st.markdown(f'<span class="match-score">Similitud {selected_rank["SIMILITUD"]:.1f}% · Venta promedio 3M {display_number(selected_rank.get("VENTA PROMEDIO 3M"), 2)} millones</span>', unsafe_allow_html=True)
                 mirror_type = st.selectbox("Tipo", [NO_SELECTION] + TYPE_OPTIONS, key=f"mirror_type_{analysis_id}_{selected_cr}")
                 mirror_transparency = st.selectbox(
                     "Transparencia",
